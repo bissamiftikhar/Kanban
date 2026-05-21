@@ -2,80 +2,109 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp">
+    android:background="@android:color/white">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="20dp">
 
-        <TextView
-            android:id="@+id/tvDetailTitle"
+        <EditText
+            android:id="@+id/etDetailTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="24sp"
+            android:textSize="22sp"
             android:textStyle="bold"
-            android:hint="Task Title" />
+            android:hint="Title"
+            android:background="@null"
+            android:textColor="@android:color/black"/>
 
         <TextView
             android:id="@+id/tvDetailStatus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:background="#E0E0E0"
-            android:padding="4dp"
-            android:text="Status: Todo" />
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="4dp"
+            android:background="#EEEEEE"
+            android:textColor="#666666"
+            android:text="Status: todo"/>
 
-        <TextView
-            android:id="@+id/tvDetailDescription"
+        <EditText
+            android:id="@+id/etDetailDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:textSize="16sp"
-            android:hint="Description goes here..." />
+            android:hint="No description"
+            android:background="@null"
+            android:textColor="#444444"
+            android:gravity="top"
+            android:minLines="3"/>
+
+        <Button
+            android:id="@+id/btnUpdateTask"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Save Changes"
+            android:visibility="gone"/>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginTop="24dp"
-            android:background="#CCCCCC" />
+            android:background="#DDDDDD" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="Collaborators"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:textColor="@android:color/black"/>
 
         <TextView
             android:id="@+id/tvCollaboratorsList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="No collaborators yet" />
+            android:layout_marginTop="4dp"
+            android:textColor="#777777"
+            android:text="Only you"/>
 
-        <EditText
-            android:id="@+id/etCollaboratorEmail"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:hint="Enter email to add collaborator"
-            android:inputType="textEmailAddress" />
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp">
 
-        <Button
-            android:id="@+id/btnAddCollaborator"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Add" />
+            <EditText
+                android:id="@+id/etCollaboratorEmail"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="User email"
+                android:inputType="textEmailAddress"/>
+
+            <Button
+                android:id="@+id/btnAddCollaborator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add"/>
+        </LinearLayout>
 
         <TextView
+            android:id="@+id/tvMoveToLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:text="Change Status"
-            android:textStyle="bold" />
+            android:text="Move to:"
+            android:textStyle="bold"
+            android:textColor="@android:color/black"/>
 
         <LinearLayout
+            android:id="@+id/layoutStatusButtons"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -83,28 +112,48 @@
 
             <Button
                 android:id="@+id/btnToTodo"
-                style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Todo" />
+                android:text="Todo"
+                android:layout_marginEnd="4dp"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
 
             <Button
                 android:id="@+id/btnToInProgress"
-                style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="In Progress" />
+                android:text="In Progress"
+                android:layout_marginHorizontal="4dp"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
 
             <Button
                 android:id="@+id/btnToDone"
-                style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Done" />
+                android:text="Done"
+                android:layout_marginStart="4dp"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
         </LinearLayout>
+
+        <Button
+            android:id="@+id/btnDeleteTask"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="Delete Task"
+            android:textColor="@android:color/white"
+            android:backgroundTint="#FF4444"/>
+
+        <Button
+            android:id="@+id/btnCloseDetail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="Done"
+            style="@style/Widget.MaterialComponents.Button.TextButton"/>
 
     </LinearLayout>
 </ScrollView>

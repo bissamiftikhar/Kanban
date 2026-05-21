@@ -7,7 +7,7 @@
     android:padding="32dp">
 
     <TextView
-        android:text="KanFlow"
+        android:text="Kanban"
         android:textSize="32sp"
         android:textStyle="bold"
         android:layout_marginBottom="32dp"
