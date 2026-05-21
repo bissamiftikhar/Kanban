@@ -2,6 +2,7 @@ package com.bissam.kanban;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
     FirebaseAuth auth;
     TabLayout tabLayout;
     ViewPager2 viewPager;
+    FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,11 +38,23 @@ public class MainActivity extends AppCompatActivity {
 
         tabLayout = findViewById(R.id.tabLayout);
         viewPager = findViewById(R.id.viewPager);
+        fab = findViewById(R.id.fabAddTask);
 
         setupTabs();
 
-        FloatingActionButton fab = findViewById(R.id.fabAddTask);
         fab.setOnClickListener(v -> showCreateTaskDialog());
+
+        // Hide FAB in other tabs
+        viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                if (position == 0) {
+                    fab.show();
+                } else {
+                    fab.hide();
+                }
+            }
+        });
     }
 
     private void showCreateTaskDialog() {
