@@ -4,8 +4,10 @@
 ## 1. How to Run
 
 Download the APK from the Releases section on this GitHub page. Install it on any Android device running Android 7 or above. Create an account, start adding tasks. Everything persists automatically.
+Note: APK is a debug build for ease of testing.
 
 To run from source you will need Android Studio. Clone the repo,then run on any emulator or device with API 24 or above.
+
 
 
 ## 2. Stack Choice
