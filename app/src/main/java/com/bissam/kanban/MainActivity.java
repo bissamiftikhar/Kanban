@@ -1,5 +1,6 @@
 package com.bissam.kanban;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -23,25 +24,28 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        auth = FirebaseAuth.getInstance();
+        if (auth.getCurrentUser() == null) {
+            startActivity(new Intent(this, LoginActivity.class));
+            finish();
+            return;
+        }
+
         setContentView(R.layout.activity_main);
 
-        auth = FirebaseAuth.getInstance();
         tabLayout = findViewById(R.id.tabLayout);
         viewPager = findViewById(R.id.viewPager);
 
         setupTabs();
 
-        // Single listener for the FAB
         FloatingActionButton fab = findViewById(R.id.fabAddTask);
         fab.setOnClickListener(v -> showCreateTaskDialog());
     }
 
     private void showCreateTaskDialog() {
         CreateTaskDialog dialog = new CreateTaskDialog();
-        // Set the listener to handle the data when "Create" is clicked in the dialog
-        dialog.setOnTaskSaveListener((title, description) -> {
-            saveTaskToFirebase(title, description);
-        });
+        dialog.setOnTaskSaveListener(this::saveTaskToFirebase);
         dialog.show(getSupportFragmentManager(), "CreateTaskDialog");
     }
 
@@ -53,7 +57,6 @@ public class MainActivity extends AppCompatActivity {
         String uid = (user != null) ? user.getUid() : "unknown";
         String name = (user != null && user.getDisplayName() != null) ? user.getDisplayName() : "Anonymous";
 
-        // Create the Task object. Note: status is "todo" (lowercase) to match your PagerAdapter
         Task newTask = new Task(taskId, title, description, "todo", uid, name);
 
         if (taskId != null) {
