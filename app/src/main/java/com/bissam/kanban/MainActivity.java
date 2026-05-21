@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -27,6 +28,14 @@ public class MainActivity extends AppCompatActivity {
 
         findViewById(R.id.fabAddTask).setOnClickListener(v -> {
             new CreateTaskDialog().show(getSupportFragmentManager(), "CreateTask");
+        });
+
+        FloatingActionButton fab = findViewById(R.id.fabAddTask);
+        fab.setOnClickListener(v -> {
+            TodoFragment fragment = (TodoFragment) getSupportFragmentManager().findFragmentByTag("f" + viewPager.getCurrentItem());
+            if (fragment != null) {
+                fragment.showCreateTaskDialog();
+            }
         });
     }
 
