@@ -1,3 +1,4 @@
+// TaskListFragment.java updated with minimal necessary changes
 package com.bissam.kanban;
 
 import android.os.Bundle;
@@ -23,12 +24,12 @@ import java.util.List;
 
 public class TaskListFragment extends Fragment {
 
-    String status;
-    RecyclerView recyclerView;
-    TaskAdapter adapter;
-    List<Task> allTasks = new ArrayList<>();
-    DatabaseReference db;
-    FirebaseAuth auth;
+    private String status;
+    private RecyclerView recyclerView;
+    private TaskAdapter adapter;
+    private List<Task> allTasks = new ArrayList<>();
+    private DatabaseReference db;
+    private FirebaseAuth auth;
 
     public static TaskListFragment newInstance(String status) {
         TaskListFragment fragment = new TaskListFragment();
@@ -38,6 +39,7 @@ public class TaskListFragment extends Fragment {
         return fragment;
     }
 
+    @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_task_list, container, false);
@@ -45,6 +47,7 @@ public class TaskListFragment extends Fragment {
         if (getArguments() != null) {
             status = getArguments().getString("status");
         }
+
         auth = FirebaseAuth.getInstance();
         db = FirebaseDatabase.getInstance().getReference();
 
@@ -59,9 +62,9 @@ public class TaskListFragment extends Fragment {
         return view;
     }
 
-    void loadTasks() {
+    private void loadTasks() {
         if (auth.getCurrentUser() == null) return;
-        
+
         String uid = auth.getCurrentUser().getUid();
         db.child("tasks").addValueEventListener(new ValueEventListener() {
             @Override
