@@ -1,13 +1,18 @@
 package com.bissam.kanban;
 
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -26,17 +31,40 @@ public class MainActivity extends AppCompatActivity {
 
         setupTabs();
 
-        findViewById(R.id.fabAddTask).setOnClickListener(v -> {
-            new CreateTaskDialog().show(getSupportFragmentManager(), "CreateTask");
-        });
-
+        // Single listener for the FAB
         FloatingActionButton fab = findViewById(R.id.fabAddTask);
-        fab.setOnClickListener(v -> {
-            TodoFragment fragment = (TodoFragment) getSupportFragmentManager().findFragmentByTag("f" + viewPager.getCurrentItem());
-            if (fragment != null) {
-                fragment.showCreateTaskDialog();
-            }
+        fab.setOnClickListener(v -> showCreateTaskDialog());
+    }
+
+    private void showCreateTaskDialog() {
+        CreateTaskDialog dialog = new CreateTaskDialog();
+        // Set the listener to handle the data when "Create" is clicked in the dialog
+        dialog.setOnTaskSaveListener((title, description) -> {
+            saveTaskToFirebase(title, description);
         });
+        dialog.show(getSupportFragmentManager(), "CreateTaskDialog");
+    }
+
+    private void saveTaskToFirebase(String title, String description) {
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("tasks");
+        String taskId = ref.push().getKey();
+
+        FirebaseUser user = auth.getCurrentUser();
+        String uid = (user != null) ? user.getUid() : "unknown";
+        String name = (user != null && user.getDisplayName() != null) ? user.getDisplayName() : "Anonymous";
+
+        // Create the Task object. Note: status is "todo" (lowercase) to match your PagerAdapter
+        Task newTask = new Task(taskId, title, description, "todo", uid, name);
+
+        if (taskId != null) {
+            ref.child(taskId).setValue(newTask).addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    Toast.makeText(MainActivity.this, "Task created successfully!", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(MainActivity.this, "Error: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
     }
 
     void setupTabs() {

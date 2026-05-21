@@ -1,5 +1,9 @@
 package com.bissam.kanban;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
+
 public class BoardPagerAdapter extends FragmentStateAdapter {
 
     public BoardPagerAdapter(AppCompatActivity activity) {
