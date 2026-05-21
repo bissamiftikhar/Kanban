@@ -1,10 +1,13 @@
-// TaskListFragment.java updated with minimal necessary changes
 package com.bissam.kanban;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,8 +29,11 @@ public class TaskListFragment extends Fragment {
 
     private String status;
     private RecyclerView recyclerView;
+    private TextView tvEmpty;
+    private EditText etSearch;
     private TaskAdapter adapter;
     private List<Task> allTasks = new ArrayList<>();
+    private List<Task> filteredTasks = new ArrayList<>();
     private DatabaseReference db;
     private FirebaseAuth auth;
 
@@ -52,14 +58,60 @@ public class TaskListFragment extends Fragment {
         db = FirebaseDatabase.getInstance().getReference();
 
         recyclerView = view.findViewById(R.id.recyclerView);
+        tvEmpty = view.findViewById(R.id.tvEmpty);
+        etSearch = view.findViewById(R.id.etSearch);
+        
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
 
-        adapter = new TaskAdapter(allTasks, requireContext(), false);
+        adapter = new TaskAdapter(filteredTasks, requireContext(), false);
         recyclerView.setAdapter(adapter);
 
+        setupSearch();
         loadTasks();
 
         return view;
+    }
+
+    private void setupSearch() {
+        etSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                filter(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+    }
+
+    private void filter(String query) {
+        filteredTasks.clear();
+        if (query.isEmpty()) {
+            filteredTasks.addAll(allTasks);
+        } else {
+            String lowerQuery = query.toLowerCase();
+            for (Task task : allTasks) {
+                if ((task.title != null && task.title.toLowerCase().contains(lowerQuery)) ||
+                    (task.description != null && task.description.toLowerCase().contains(lowerQuery))) {
+                    filteredTasks.add(task);
+                }
+            }
+        }
+        adapter.notifyDataSetChanged();
+        checkEmpty();
+    }
+
+    private void checkEmpty() {
+        if (filteredTasks.isEmpty()) {
+            tvEmpty.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
+        } else {
+            tvEmpty.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+        }
     }
 
     private void loadTasks() {
@@ -82,7 +134,7 @@ public class TaskListFragment extends Fragment {
                         allTasks.add(task);
                     }
                 }
-                adapter.updateList(allTasks);
+                filter(etSearch.getText().toString());
             }
 
             @Override
