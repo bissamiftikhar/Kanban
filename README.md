@@ -10,6 +10,7 @@ I have included my google-services.json file in the repo so the APK and source b
 ## Quick Install (Recommended)
 
 Download the APK from the Releases section on the right side of this GitHub page. Enable "Install from unknown sources" on your Android device and install it. No setup needed.
+Note: APK is a debug build for ease of testing.
 
 
 ## Run from Source
