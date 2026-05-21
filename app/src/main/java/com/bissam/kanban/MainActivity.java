@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
     FirebaseAuth auth;
     TabLayout tabLayout;
     ViewPager2 viewPager;
-    FloatingActionButton fab;
+    FloatingActionButton fab, fabLogout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,10 +39,16 @@ public class MainActivity extends AppCompatActivity {
         tabLayout = findViewById(R.id.tabLayout);
         viewPager = findViewById(R.id.viewPager);
         fab = findViewById(R.id.fabAddTask);
+        fabLogout = findViewById(R.id.fabLogout);
 
         setupTabs();
 
         fab.setOnClickListener(v -> showCreateTaskDialog());
+        fabLogout.setOnClickListener(v -> {
+            auth.signOut();
+            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+            finish();
+        });
 
         // Hide FAB in other tabs
         viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
