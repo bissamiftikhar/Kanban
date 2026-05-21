@@ -1,6 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
-    id("com.google.gms.google-services")
+    // id("com.google.gms.google-services") // Removed to fix build error; add google-services.json to re-enable
 }
 
 android {

@@ -6,7 +6,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bissam.kanban.MainActivity;
-import com.bissam.kanban.RegisterActivity
+import com.bissam.kanban.RegisterActivity;
 import com.bissam.kanban.R;
 import com.google.firebase.auth.FirebaseAuth;
 
